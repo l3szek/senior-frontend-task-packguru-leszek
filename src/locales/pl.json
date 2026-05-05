@@ -48,5 +48,10 @@
     "noPath": "Brak ścieżki",
     "selectStart": "Wybierz węzeł startowy",
     "selectEnd": "Wybierz węzeł końcowy"
+  },
+  "search": {
+    "placeholder": "Szukaj węzłów…",
+    "matches": "brak wyników | {n} wynik | {n} wyniki | {n} wyników",
+    "clear": "Wyczyść wyszukiwanie"
   }
 }

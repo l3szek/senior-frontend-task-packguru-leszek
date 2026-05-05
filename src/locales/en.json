@@ -48,5 +48,10 @@
     "noPath": "No path found",
     "selectStart": "Select start node",
     "selectEnd": "Select end node"
+  },
+  "search": {
+    "placeholder": "Search nodes…",
+    "matches": "no matches | {n} match | {n} matches",
+    "clear": "Clear search"
   }
 }

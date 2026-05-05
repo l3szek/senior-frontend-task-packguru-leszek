@@ -25,8 +25,8 @@ const DEFAULT_COLOR = '#95a5a6'
 const props = defineProps({
   data:         { type: Object, default: () => ({ nodes: [], links: [] }) },
   selectedSlug: { type: String, default: null },
-  // Task 3: add filterQuery prop here and use it in nodeCanvasObject
-  // filterQuery: { type: String, default: '' },
+  filterQuery:  { type: String, default: '' },
+  resetPath:    { type: Boolean, default: false },
 })
 const { t } = useI18n()
 const emit = defineEmits(['select', 'clearFilter'])
@@ -168,9 +168,16 @@ onMounted(() => {
         && pathStep.value === 2
         && pathStart.value != null
         && pathNodeSlugs.value.size === 0
-      const dimmed =
+      const searchActive = props.filterQuery.length > 0
+      const lowerQuery = searchActive ? props.filterQuery.toLowerCase() : ''
+      const searchMatch = searchActive && node.title?.toLowerCase().includes(lowerQuery)
+      const dimmedBySearch = searchActive && !searchMatch
+
+      const dimmedByPath =
         (pathMode.value && pathNodeSlugs.value.size > 0 && !inPath) ||
         (awaitingEnd && !isPathStart)
+
+      const dimmed = pathMode.value ? dimmedByPath : dimmedBySearch
 
       if (dimmed) ctx.globalAlpha = 0.2
 
@@ -251,7 +258,16 @@ watch(() => props.selectedSlug, slug => {
   if (node?.x != null) fg.centerAt(node.x, node.y, 400)
 })
 
-
+watch(() => props.resetPath, () => {
+  pathMode.value = false
+  pathStep.value = 0
+  pathStart.value = null
+  pathEnd.value = null
+  pathNodeSlugs.value = new Set()
+  pathLinkIds.value = new Set()
+  noPathFound.value = false
+  fg?.d3ReheatSimulation()
+})
 
 </script>
 

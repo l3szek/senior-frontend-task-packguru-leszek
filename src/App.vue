@@ -9,22 +9,23 @@
       <span v-if="tab === 'graph'" class="status">
         {{ t('status', { n: graphData.nodes.length, m: graphData.links.length }) }}
       </span>
+      <div v-if="tab === 'graph'" class="search-wrap">
+        <input
+          ref="searchInput"
+          v-model="filterQuery"
+          class="search-input"
+          :placeholder="t('search.placeholder')"
+        />
+        <span v-if="filterQuery" class="search-matches">
+          {{ t('search.matches', { n: matchCount }, matchCount) }}
+        </span>
+        <button v-if="filterQuery" class="search-clear" :aria-label="t('search.clear')" @click="filterQuery = ''">&times;</button>
+      </div>
       <div class="lang-switch">
         <button :class="['lang-btn', { active: locale === 'en' }]" @click="locale = 'en'">{{ t('lang.en') }}</button>
         <span class="lang-sep">|</span>
         <button :class="['lang-btn', { active: locale === 'pl' }]" @click="locale = 'pl'">{{ t('lang.pl') }}</button>
       </div>
-
-      <!--
-        TODO Task 3 — Live Graph Search
-        Add a search <input> here. Pass the query string down to <Graph> as a
-        new `filterQuery` prop. When the query is non-empty:
-          • Nodes whose title matches (case-insensitive) render at full opacity.
-          • All other nodes are dimmed to ~20% opacity inside nodeCanvasObject.
-          • Show "N matches" count here and an × clear button.
-        Keyboard: "/" focuses the input; Escape clears it.
-        Hint: no re-init needed — the canvas loop already reads props every frame.
-      -->
     </header>
 
     <div v-if="tab === 'graph'" class="app-body">
@@ -32,7 +33,10 @@
         <Graph
           :data="graphData"
           :selected-slug="selectedSlug"
+          :filter-query="filterQuery"
+          :reset-path="resetPath"
           @select="onSelect"
+          @clear-filter="onClearFilter"
         />
       </div>
       <div :class="['detail-pane', { open: !!selectedSlug }]">
@@ -52,7 +56,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { graphData, getChunk } from './data/mock.js'
 import Graph from './components/Graph.vue'
@@ -65,6 +69,39 @@ const tab = ref('graph')
 const selectedSlug = ref(null)
 const chunk = ref(null)
 const chunkLoading = ref(false)
+
+const filterQuery = ref('')
+const resetPath = ref(false)
+const searchInput = ref(null)
+
+const matchCount = computed(() => {
+  if (!filterQuery.value) return 0
+  return graphData.nodes.filter(n =>
+    n.title.toLowerCase().includes(filterQuery.value.toLowerCase())
+  ).length
+})
+
+watch(filterQuery, (newVal, oldVal) => {
+  if (newVal && !oldVal) resetPath.value = !resetPath.value
+})
+
+function onClearFilter() {
+  filterQuery.value = ''
+}
+
+function handleKey(e) {
+  if (tab.value !== 'graph') return
+  if (e.key === '/' && document.activeElement !== searchInput.value) {
+    e.preventDefault()
+    searchInput.value?.focus()
+  } else if (e.key === 'Escape' && filterQuery.value) {
+    filterQuery.value = ''
+    searchInput.value?.blur()
+  }
+}
+
+onMounted(() => window.addEventListener('keydown', handleKey))
+onUnmounted(() => window.removeEventListener('keydown', handleKey))
 
 function onSelect(slug) {
   selectedSlug.value = selectedSlug.value === slug ? null : slug
