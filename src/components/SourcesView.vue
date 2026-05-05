@@ -1,19 +1,14 @@
-<!--
-  Task 1 — Refactoring:
-    • fmtTime() is duplicated here, in ChunkPanel.vue, and in PartPanel.vue.
-      Extract to src/utils/format.js and import it.
--->
 <template>
   <div class="app-body">
     <div class="sources-view">
-      <div class="sources-header">{{ sources.length }} source file{{ sources.length !== 1 ? 's' : '' }}</div>
+      <div class="sources-header">{{ t('sources.header', { n: sources.length }, sources.length) }}</div>
       <div class="sources-list">
         <div v-for="s in sources" :key="s.source_name" class="source-card">
           <button class="source-card-header" @click="toggle(s.source_name)">
             <div class="source-card-title">
               <span class="source-card-name">{{ s.source_name }}</span>
               <span class="source-card-meta">
-                {{ s.source_part_count }} part{{ s.source_part_count !== 1 ? 's' : '' }}
+                {{ t('sources.parts', { n: s.source_part_count }, s.source_part_count) }}
                 <template v-if="s.processor"> · {{ s.processor }} {{ s.processor_version }}</template>
                 · {{ fmtDate(s.processed_at) }}
               </span>
@@ -24,11 +19,11 @@
           <div v-if="expanded[s.source_name]" class="source-card-body">
             <div class="source-meta-grid">
               <template v-if="s.source_path">
-                <span class="meta-label">Path</span>
+                <span class="meta-label">{{ t('sources.path') }}</span>
                 <span class="meta-value">{{ s.source_path }}</span>
               </template>
               <template v-if="s.source_sha256">
-                <span class="meta-label">SHA-256</span>
+                <span class="meta-label">{{ t('sources.sha') }}</span>
                 <span class="meta-value mono">{{ s.source_sha256 }}</span>
               </template>
             </div>
@@ -36,7 +31,12 @@
             <table v-if="s.parts.length" class="parts-table">
               <thead>
                 <tr>
-                  <th>#</th><th>Title</th><th>Start</th><th>End</th><th>Duration</th><th>Lang</th>
+                  <th>{{ t('sources.col.index') }}</th>
+                  <th>{{ t('sources.col.title') }}</th>
+                  <th>{{ t('sources.col.start') }}</th>
+                  <th>{{ t('sources.col.end') }}</th>
+                  <th>{{ t('sources.col.duration') }}</th>
+                  <th>{{ t('sources.col.lang') }}</th>
                 </tr>
               </thead>
               <tbody>
@@ -61,7 +61,7 @@
     </div>
 
     <div :class="['detail-pane', { open: !!selectedPart }]">
-      <div v-if="partLoading" class="panel-loading">Loading…</div>
+      <div v-if="partLoading" class="panel-loading">{{ t('loading') }}</div>
       <PartPanel
         v-else-if="partData"
         :part="partData"
@@ -73,26 +73,22 @@
 
 <script setup>
 import { ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { sources, getPart } from '../data/mock.js'
+import { fmtTime } from '../utils/format.js'
 import PartPanel from './PartPanel.vue'
 
-// Task 1: extract to src/utils/format.js (also in ChunkPanel.vue and PartPanel.vue)
-function fmtTime(secs) {
-  if (secs == null) return null
-  const m = Math.floor(secs / 60)
-  const s = Math.floor(secs % 60)
-  return `${m}:${String(s).padStart(2, '0')}`
-}
+const { t } = useI18n()
 
 function fmtDate(iso) {
   if (!iso) return '—'
   return new Date(iso).toLocaleString()
 }
 
-const expanded    = ref({})
+const expanded     = ref({})
 const selectedPart = ref(null)
-const partData    = ref(null)
-const partLoading = ref(false)
+const partData     = ref(null)
+const partLoading  = ref(false)
 
 function toggle(name) {
   expanded.value[name] = !expanded.value[name]

@@ -1,14 +1,19 @@
 <template>
   <div class="app">
     <header class="app-header">
-      <h1>Wiki Knowledge Graph</h1>
+      <h1>{{ t('appTitle') }}</h1>
       <nav class="tabs">
-        <button :class="['tab', { active: tab === 'graph' }]" @click="tab = 'graph'">Graph</button>
-        <button :class="['tab', { active: tab === 'sources' }]" @click="tab = 'sources'">Source Files</button>
+        <button :class="['tab', { active: tab === 'graph' }]" @click="tab = 'graph'">{{ t('tabs.graph') }}</button>
+        <button :class="['tab', { active: tab === 'sources' }]" @click="tab = 'sources'">{{ t('tabs.sources') }}</button>
       </nav>
       <span v-if="tab === 'graph'" class="status">
-        {{ graphData.nodes.length }} chunks · {{ graphData.links.length }} links
+        {{ t('status', { n: graphData.nodes.length, m: graphData.links.length }) }}
       </span>
+      <div class="lang-switch">
+        <button :class="['lang-btn', { active: locale === 'en' }]" @click="locale = 'en'">{{ t('lang.en') }}</button>
+        <span class="lang-sep">|</span>
+        <button :class="['lang-btn', { active: locale === 'pl' }]" @click="locale = 'pl'">{{ t('lang.pl') }}</button>
+      </div>
 
       <!--
         TODO Task 3 — Live Graph Search
@@ -31,14 +36,14 @@
         />
       </div>
       <div :class="['detail-pane', { open: !!selectedSlug }]">
-        <div v-if="chunkLoading" class="panel-loading">Loading…</div>
+        <div v-if="chunkLoading" class="panel-loading">{{ t('loading') }}</div>
         <ChunkPanel
           v-else-if="chunk"
           :chunk="chunk"
           @navigate="selectedSlug = $event"
           @close="selectedSlug = null"
         />
-        <div v-else class="empty-state">Select a node to explore</div>
+        <div v-else class="empty-state">{{ t('emptyState') }}</div>
       </div>
     </div>
 
@@ -48,10 +53,13 @@
 
 <script setup>
 import { ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { graphData, getChunk } from './data/mock.js'
 import Graph from './components/Graph.vue'
 import ChunkPanel from './components/ChunkPanel.vue'
 import SourcesView from './components/SourcesView.vue'
+
+const { t, locale } = useI18n()
 
 const tab = ref('graph')
 const selectedSlug = ref(null)

@@ -1,10 +1,3 @@
-<!--
-  Task 1 — Refactoring:
-    TYPE_COLORS below duplicates the same five keys as TYPE_LABELS in ChunkPanel.vue.
-    Extract both into a unified src/utils/types.js config and import from there.
-
-  Task 2 — Algorithm: see the TODO block inside <script setup>.
--->
 <template>
   <div ref="containerEl" style="width:100%;height:100%" />
 </template>
@@ -12,15 +5,8 @@
 <script setup>
 import { ref, watch, onMounted, onUnmounted } from 'vue'
 import ForceGraph from 'force-graph'
+import { TYPE_COLORS } from '../utils/types.js'
 
-// Task 1: unify with TYPE_LABELS in ChunkPanel.vue → src/utils/types.js
-const TYPE_COLORS = {
-  process_stage:   '#4f8ef7',
-  machine_element: '#27ae60',
-  machine_part:    '#16a085',
-  procedure:       '#e67e22',
-  concept:         '#8e44ad',
-}
 const DEFAULT_COLOR = '#95a5a6'
 
 const props = defineProps({

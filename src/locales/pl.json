@@ -1,0 +1,46 @@
+{
+  "tabs": {
+    "graph": "Wykres",
+    "sources": "Pliki źródłowe"
+  },
+  "status": "{n} węzłów · {m} połączeń",
+  "loading": "Ładowanie…",
+  "emptyState": "Wybierz węzeł do eksploracji",
+  "lang": {
+    "en": "EN",
+    "pl": "PL"
+  },
+  "appTitle": "Wiki Knowledge Graph",
+  "chunk": {
+    "relatedChunks": "Powiązane fragmenty",
+    "linksTo": "Łączy się z",
+    "referencedBy": "Odwołuje się do",
+    "sources": "Źródła",
+    "part": "Część"
+  },
+  "part": {
+    "title": "Fragment źródła",
+    "close": "Zamknij"
+  },
+  "sources": {
+    "header": "brak plików źródłowych | {n} plik źródłowy | {n} pliki źródłowe | {n} plików źródłowych",
+    "parts": "brak części | {n} część | {n} części | {n} części",
+    "path": "Ścieżka",
+    "sha": "SHA-256",
+    "col": {
+      "index": "#",
+      "title": "Tytuł",
+      "start": "Początek",
+      "end": "Koniec",
+      "duration": "Czas trwania",
+      "lang": "Język"
+    }
+  },
+  "type": {
+    "processStage": "Etap procesu",
+    "machineElement": "Element maszyny",
+    "machinePart": "Część maszyny",
+    "procedure": "Procedura",
+    "concept": "Pojęcie"
+  }
+}

@@ -375,3 +375,25 @@ a {
 .part-row { cursor: pointer; }
 .part-row:hover td { background: #1a2a50; }
 .part-row.selected td { background: #0f3460; }
+.lang-switch {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+}
+.lang-btn {
+  background: none;
+  border: none;
+  color: #8899aa;
+  cursor: pointer;
+  font-size: 0.8rem;
+  padding: 2px 4px;
+}
+.lang-btn.active {
+  color: #e0e0ff;
+  font-weight: 600;
+}
+.lang-sep {
+  color: #445566;
+  font-size: 0.8rem;
+}
