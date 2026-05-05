@@ -42,5 +42,11 @@
     "machinePart": "Machine Part",
     "procedure": "Procedure",
     "concept": "Concept"
+  },
+  "path": {
+    "toggle": "Path",
+    "noPath": "No path found",
+    "selectStart": "Select start node",
+    "selectEnd": "Select end node"
   }
 }

@@ -42,5 +42,11 @@
     "machinePart": "Część maszyny",
     "procedure": "Procedura",
     "concept": "Pojęcie"
+  },
+  "path": {
+    "toggle": "Ścieżka",
+    "noPath": "Brak ścieżki",
+    "selectStart": "Wybierz węzeł startowy",
+    "selectEnd": "Wybierz węzeł końcowy"
   }
 }
